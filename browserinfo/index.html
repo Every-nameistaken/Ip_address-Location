@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ip &amp; location checker</title>
+    <link rel="icon" href="img/location.jpg">
+    <link rel="stylesheet" href="style.css">
+<style>
+    table tr td{
+        border: 1px solid;
+    }
+    table tr:nth-child(even){
+        background-color: gray;
+    }
+</style>
+</head>
+
+<body>
+    <table class="border-2 border-b-slate-900 border-t-slate-900 m-auto max-lg:w-2">
+        <tr class="border-black border-2 p-8">
+            <th>S/N</th>
+            <th>Request</th>
+            <th>Result</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>City</td>
+            <td class="city"></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Continent</td>
+            <td class="cont"></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Country</td>
+            <td class="country"></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Ip Address</td>
+            <td class="ip"></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Latitude</td>
+            <td class="lat"></td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Longitude</td>
+            <td class="lon"></td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>Region</td>
+            <td class="region"></td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>Timezone</td>
+            <td class="tz"></td>
+        </tr>
+        <tr>
+            <td>9</td>
+            <td>ScreenHeight/ScreenWidth</td>
+            <td class="screenSize"></td>
+        </tr>
+        <tr>
+            <td>10</td>
+            <td>Protocols</td>
+            <td class="protocols"></td>
+        </tr>
+        <tr>
+            <td>11</td>
+            <td>cookieEnabled?</td>
+            <td class="cookies"></td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>Browser</td>
+            <td class="browerName"></td>
+        </tr>
+        <tr>
+            <td>13</td>
+            <td>Browser Version</td>
+            <td class="browserVersion"></td>
+        </tr>
+        <tr>
+            <td>14</td>
+            <td>UserAgent</td>
+            <td class="userAgent"></td>
+        </tr>
+        <tr>
+            <td>15</td>
+            <td>Operating System (OS)</td>
+            <td class="os"></td>
+        </tr>
+        <tr>
+            <td>16</td>
+            <td>Language</td>
+            <td class="language"></td>
+        </tr>
+        <tr>
+            <td>17</td>
+            <td>Browser Online Status</td>
+            <td class="onlineStatus"></td>
+        </tr>
+        <tr>
+            <td>18</td>
+            <td>is JavaScript enabled?</td>
+            <td class="jsEnabled"></td>
+        </tr>
+    </table>
+    
+    <script>
+         async function fetchIp() {
+            
+            let cityOutput = document.querySelector(".city");
+            let contOutput = document.querySelector(".cont");
+            let countryOutput = document.querySelector(".country");
+            let ipOutput = document.querySelector(".ip");
+            let latOutput = document.querySelector(".lat");
+            let lonOutput = document.querySelector(".lon");
+            let regionOutput = document.querySelector(".region");
+            let tzOutput = document.querySelector(".tz");
+
+            let url = 'https://api.ipify.org';
+            let response = await fetch(url)
+            .then(function(response) {
+                return response.text()
+            })
+            .then(async function(data) {
+                
+              let res = await fetch(`https://api.ipfind.com/?ip=${data}`) 
+
+               .then(function(res) {
+                return res.json();
+               })
+               .then(function(result) {
+                let {city,continent,country,ip_address,latitude,longitude,region,timezone} = result;
+                cityOutput.innerHTML = city;
+                contOutput.innerHTML = continent;
+                countryOutput.innerHTML = country;
+                ipOutput.innerHTML = ip_address;
+                latOutput.innerHTML = latitude;
+                lonOutput.innerHTML = longitude;
+                regionOutput.innerHTML = region;
+                tzOutput.innerHTML = timezone;
+                
+               })
+            })
+        }
+
+        fetchIp();
+        let screenSize = document.querySelector('.screenSize'),
+            protocols = document.querySelector('.protocols'),
+            cookies = document.querySelector('.cookies'),
+            browerName = document.querySelector('.browerName'),
+            browserVersion = document.querySelector('.browserVersion'),
+            userAgent = document.querySelector('.userAgent'),
+            platform = document.querySelector('.os'),
+            language = document.querySelector('.language'),
+            onlineStatus = document.querySelector('.onlineStatus'),
+            jsEnabled = document.querySelector('.jsEnabled');
+
+            screenSize.innerText = `${screen.height}px${screen.width}px`;
+            protocols.textContent = location.protocol;
+            cookies.innerHTML = navigator.cookieEnabled;
+            browerName.innerHTML = navigator.appName;
+            browserVersion.innerHTML = navigator.appVersion;
+            userAgent.innerHTML = navigator.userAgent;
+            platform.innerHTML = navigator.platform;
+            language.innerHTML= navigator.language;
+            onlineStatus.textContent = navigator.onLine;
+            jsEnabled.textContent = navigator.javaEnabled();
+
+    </script>
+</body>
+</html>
